@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    var data = [
+  {id:"01", name: "张大大", pid:"", job: "项目经理"},
+  {id:"02", name: "小亮", pid:"01", job: "产品leader"},
+  {id:"03", name: "小美", pid:"01", job: "UIleader"},
+  {id:"04", name: "老马", pid:"01", job: "技术leader"},
+  {id:"05", name: "老王", pid:"01", job: "测试leader"},
+  {id:"06", name: "老李", pid:"01", job: "运维leader"},
+  {id:"07", name: "小丽", pid:"02", job: "产品经理"},
+  {id:"08", name: "大光", pid:"02", job: "产品经理"},
+  {id:"09", name: "小高", pid:"03", job: "UI设计师"},
+  {id:"10", name: "小刘", pid:"04", job: "前端工程师"},
+  {id:"11", name: "小华", pid:"04", job: "后端工程师"},
+  {id:"12", name: "小李", pid:"04", job: "后端工程师"},
+  {id:"13", name: "小赵", pid:"05", job: "测试工程师"},
+  {id:"14", name: "小强", pid:"05", job: "测试工程师"},
+  {id:"15", name: "小涛", pid:"06", job: "运维工程师"}
+]
+
+// const arr =data.filter(item=>{
+//   console.log(item.pid);
+//  return item.pid==='04'
+// })
+// console.log(arr);
+var arr = [{label:'男',value: 1}, {label:'女',value: 0}]
+
+// function f(arr) {
+//   // 写代码，得到
+// //   const obj2 = arr.reduce((prev, cur) => {
+
+//   const obj2 = arr.reduce((prev, cur) => {
+//     console.log(prev);
+//   prev[cur.value] = cur.label
+
+//   return prev
+// }, {})
+// }
+var obj = {label:'男',value: 1,age: 18}
+
+console.log(JSON.stringify(Object.values(obj)));
+// const arr1=[]
+// arr.reduce((prev, cur) => {
+//         prev = cur.label
+
+//  console.log(prev);
+//  arr1.push(prev)
+//  return arr1
+// }, {})
+// console.log(arr1);
+// var obj = f(arr);
+// console.log(obj)
+
+// obj2 = {'1': '男'， '0': '女'}
+  </script>
+</body>
+</html>
