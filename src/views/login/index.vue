@@ -106,7 +106,9 @@ export default {
       this.$refs.loginForm.validate(async valid => {
         if (valid) {
           try {
-            this.$store.dispatch('user/userLogin', this.loginForm)
+            await this.$store.dispatch('user/userLogin', this.loginForm)
+            // encodeURIComponent()
+            this.$router.push(this.$route.query.return_url || '/')
           } catch (error) {
             return
           }
