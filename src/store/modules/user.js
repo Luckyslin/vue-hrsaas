@@ -6,7 +6,8 @@ export default {
   state: {
     token: getToken() || '',
     userInfo: {},
-    userRoute: ''
+    userRoute: '',
+    isShowDialog: false
   },
   mutations: {
     // 存储token到state中
@@ -28,6 +29,13 @@ export default {
     // 存储链接
     setRoute(state, payload) {
       state.userRoute = payload
+    },
+    // 控制dialog
+    closeDialog(state) {
+      state.isShowDialog = false
+    },
+    openDialog(state) {
+      state.isShowDialog = true
     }
   },
   actions: {

@@ -21,9 +21,9 @@ export function getAvatar(id) {
     method: 'get'
   })
 }
-export function getDepartment() {
-  return request({
-    url: '/company/department'
+// export function getDepartment() {
+//   return request({
+//     url: '/company/department'
 
-  })
-}
+//   })
+// }

@@ -31,8 +31,9 @@ service.interceptors.response.use(function(response) {
   // 对响应数据做点什么
 
   const result = response.data.message
+  console.log(result)
   if (response.data.success) {
-    if (result === '登录成功') {
+    if (result === '登录成功' || result === '部门新增成功' || result === '更新部门详情成功') {
       Vue.prototype.$message.success(result)
     }
     return response.data

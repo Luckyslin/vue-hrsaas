@@ -76,6 +76,19 @@
       height: 100%;
       width: 100% !important;
 
+      .router-link-exact-active {
+        background-color: #fff;
+        color: rgb(64, 158, 255);
+
+        .svg-icon {
+          color: rgb(64, 158, 255);
+        }
+
+        span {
+          color: rgb(64, 158, 255);
+        }
+      }
+
       a {
         li {
           .svg-icon {
