@@ -23,7 +23,7 @@
       </el-card>
     </div>
     <!-- dialog组件 -->
-    <addDepts ref="addDepts" :node-tree="nodeTree" @addBranch="getDepts" />
+    <addDepts ref="addDepts" :node-tree="nodeTree" :origin-list="originList" @addBranch="getDepts" />
   </div>
 </template>
 
@@ -48,7 +48,8 @@ export default {
       },
       list: [],
 
-      nodeTree: {}
+      nodeTree: {},
+      originList: []
     }
   },
 
@@ -60,9 +61,14 @@ export default {
     ...mapMutations('user', ['openDialog']),
     async  getDepts() {
       const { data: res } = await getDepartment()
-
+      // 删除第一个数组元素
+      res.depts.shift()
       this.list = this.listTrees(res.depts, '')
-      // console.log(this.list)
+      // 将List中数据抽取出来做表单校验
+      this.originList = res.depts.map(({ code, id, pid, name }) => {
+        return { code, id, pid, name }
+      })
+      // console.log(this.originList)
     },
     listTrees(list, id) {
       const res = []

@@ -19,7 +19,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item @click.native="addDepts">添加子部门</el-dropdown-item>
               <el-dropdown-item v-if="company" @click.native="editDepts">编辑部门</el-dropdown-item>
-              <el-dropdown-item v-if="company" @click.native="deltDepts">删除部门</el-dropdown-item>
+              <el-dropdown-item v-if="company &&nodeTree.pid" @click.native="deltDepts">删除部门</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
@@ -49,9 +49,7 @@ export default {
 
     }
   },
-
   methods: {
-
     addDepts() {
       this.$emit('addDepts', this.nodeTree)
     },

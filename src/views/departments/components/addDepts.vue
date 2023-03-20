@@ -36,13 +36,48 @@ export default {
   name: 'VueAdminTemplateMasterAddDepts',
   props: {
 
+    // eslint-disable-next-line vue/require-default-prop
     nodeTree: {
       type: Object,
       require: true
+    },
+    // eslint-disable-next-line vue/require-default-prop
+    originList: {
+      type: Array
+
     }
   },
 
   data() {
+    const validCode = (rule, value, callback) => {
+      let reslut = this.originList.map(item => item.code)
+      if (this.title === '编辑数据') {
+        // this.nodeTree.code = ''
+        const codeList = this.originList.filter(item => item.id !== this.nodeTree.id)
+        // console.log(codeList)
+        reslut = codeList.map(item => item.code)
+      }
+      if (reslut.includes(value)) {
+        callback(new Error(value + '已存在'))
+      } else {
+        callback()
+      }
+    }
+    const validName = (rule, value, callback) => {
+      let NameList = this.originList.filter(item => item.pid === this.nodeTree.id).map(item => item.name)
+      // console.log(NameList)
+      if (this.title === '编辑数据') {
+        NameList = this.originList.filter(item => {
+          return item.pid === this.nodeTree.pid && item.id !== this.nodeTree.id
+        }).map(item => item.name)
+        // console.log(NameList)
+      }
+      if (NameList.includes(value)) {
+        callback(new Error(value + '已存在'))
+      } else {
+        callback()
+      }
+    }
     return {
       title: '新增数据',
       form: {
@@ -55,19 +90,19 @@ export default {
         name: [{ required: true, message: '该项不能为空', trigger: 'blur' },
           {
             min: 1, max: 30, message: '长度在1-30之间', tigger: 'blur'
-          }],
+          },
+          { validator: validName, tigger: 'blur' }
+        ],
         code: [{ required: true, message: '该项不能为空', tigger: 'blur' },
-          {
-            min: 1, max: 30, message: '长度在1-30之间', tigger: 'blur'
-          }],
+          { min: 1, max: 30, message: '长度在1-30之间', tigger: 'blur' },
+          { validator: validCode, tigger: 'blur' }
+        ],
         manager: [{ required: true, message: '该项不能为空', tigger: 'blur' },
-          {
-            min: 1, max: 30, message: '长度在1-30之间', tigger: 'blur'
-          }],
+          { min: 1, max: 30, message: '长度在1-30之间', tigger: 'blur' }
+        ],
         introduce: [{ required: true, message: '该项不能为空', tigger: 'blur' },
-          {
-            min: 1, max: 20, message: '长度在1-300之间', tigger: 'blur'
-          }]
+          { min: 1, max: 20, message: '长度在1-300之间', tigger: 'blur' }
+        ]
       },
       // 下拉信息
       UserPles: {}
@@ -90,7 +125,7 @@ export default {
     },
     async getUserPles() {
       const { data: res } = await getUserSimple()
-      console.log(res)
+      // console.log(res)
       this.UserPles = res
     },
     // 新增,修改树状结构
@@ -104,7 +139,7 @@ export default {
             pid: this.nodeTree.id
           })
         } else {
-          console.log(this.form)
+          // console.log(this.form)
           await editBranch(this.form)
         }
         this.$emit('addBranch')
@@ -121,6 +156,7 @@ export default {
     async  geteditSimple(id) {
       const { data: res } = await editSimple(id)
       this.form = res
+      // console.log(res)
     }
 
   }

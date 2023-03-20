@@ -62,7 +62,9 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        // 删除token
         this.$store.commit('user/remove')
+        // 使用编程式导航将当前页面的参数传递给login
         this.$router.push({ path: '/login',
           query: {
             return_url: this.$route.fullPath
