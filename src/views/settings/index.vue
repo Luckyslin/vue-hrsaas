@@ -11,7 +11,7 @@
                 icon="el-icon-plus"
                 size="small"
                 type="primary"
-                @click="showDialog=true"
+                @click="hadd"
               >新增角色</el-button>
             </el-row>
             <!-- 表格 -->
@@ -28,7 +28,7 @@
               <el-table-column label="操作">
                 <template v-slot="{row}">
                   <el-button size="small" type="success">分配权限</el-button>
-                  <el-button size="small" type="primary">编辑</el-button>
+                  <el-button size="small" type="primary" @click="hedit(row)">编辑</el-button>
                   <el-button size="small" type="danger" @click="hDel(row)">删除</el-button>
                 </template>
               </el-table-column>
@@ -78,7 +78,7 @@
 
         </el-tabs>
       </el-card>
-      <el-dialog title="编辑弹层" :visible="showDialog" @close="btnCancel">
+      <el-dialog :title="title" :visible.sync="showDialog" @closed="btnCancel">
         <el-form ref="roleForm" :model="roleForm" :rules="rules" label-width="120px">
           <el-form-item label="角色名称" prop="name">
             <el-input v-model="roleForm.name" />
@@ -99,10 +99,11 @@
   </div>
 </template>
 <script>
-import { addRole, delRole, getRole } from '@/api/role'
+import { addRole, delRole, editRole, getRole } from '@/api/role'
 export default {
   data() {
     return {
+      title: '',
       q: {
         page: 1,
         pagesize: 2
@@ -121,6 +122,20 @@ export default {
       }
     }
   },
+  computed: {
+    // pageNum() {
+    // // 计算分页逻辑
+    //   const maxNum = Math.ceil(this.total / this.q.pagesize)
+    //   if (this.total % this.q.pagesize === 0) {
+    //     this.total + 1
+    //     console.log(this.total)
+    //     return maxNum + 1
+    //   } else {
+    //     return maxNum
+    //   }
+    // }
+  },
+
   created() {
     this.loadRole()
   },
@@ -177,19 +192,42 @@ export default {
     // 取消按钮
     btnCancel() {
       this.showDialog = false
+      this.roleForm = {
+        name: '',
+        description: ''
+      }
       this.$refs.roleForm.resetFields()
     },
-    btnOK() {
-      this.$refs.roleForm.validate(async valid => {
-        if (!valid) return
-        console.log({ ...this.roleForm })
-        await addRole({ ...this.roleForm }).catch(e => e)
-      })
+    hadd() {
+      this.title = '添加角色'
+      this.showDialog = true
+    },
+    hedit(row) {
+      this.title = '编辑角色'
+      this.showDialog = true
+      this.roleForm = { ...row }
+    },
+    // 确认添加
+    async btnOK() {
+      const valid = await this.$refs.roleForm.validate()
+      if (!valid) return
+      if (this.title === '添加角色') {
+        await addRole(this.roleForm).catch(e => e)
+        // 添加成功跳转到最后一页
+        const maxNum = Math.ceil(this.total / this.q.pagesize)
+        if (this.total % this.q.pagesize === 0) {
+          this.total++
+          this.q.page = maxNum + 1
+        } else {
+          this.q.page = maxNum
+        }
+      } else {
+        await editRole(this.roleForm).catch(e => e)
+      }
       this.showDialog = false
       this.$refs.roleForm.resetFields()
+      this.loadRole()
     }
-
   }
-
 }
 </script>
