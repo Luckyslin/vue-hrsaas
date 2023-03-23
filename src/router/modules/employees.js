@@ -10,5 +10,10 @@ export default// # 员工管理
     name: 'employees',
     component: () => import('@/views/employees/index'),
     meta: { title: '员工管理', icon: 'people' }
-  }]
+  }, {
+    path: 'Import',
+    name: 'emImport',
+    hidden: true,
+    component: () => import('@/views/employees/emImport.vue'),
+    meta: { title: 'Excel导入', icon: 'people' }}]
 }

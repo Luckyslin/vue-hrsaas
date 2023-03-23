@@ -115,3 +115,34 @@ export function param2Obj(url) {
   })
   return obj
 }
+export function formatDate(timeNum) {
+  const time = new Date(((Number(timeNum) - 70 * 365 - 19) * 24 * 3600 - 8 * 3600 - 42.5) * 1000)
+  const year = time.getFullYear()
+  const month = time.getMonth() + 1
+  const date = time.getDate()
+  const hour = time.getHours()
+  const min = time.getMinutes()
+  const sec = time.getSeconds()
+  const dateArr = [
+    year,
+    (month < 10 ? '0' + month : month),
+    (date < 10 ? '0' + date : date)
+  ]
+  const timeArr = [
+    (hour < 10 ? '0' + hour : hour),
+    (min < 10 ? '0' + min : min),
+    (sec < 10 ? '0' + sec : sec)
+  ]
+  return `${dateArr.join('-')} ${timeArr.join(':')}`
+}
+export function formatExcelDate(numb, format = '/') {
+  const time = new Date((numb - 25567) * 24 * 3600000 - 5 * 60 * 1000 - 43 * 1000 - 24 * 3600000 - 8 * 3600000)
+  time.setYear(time.getFullYear())
+  const year = time.getFullYear() + ''
+  const month = time.getMonth() + 1 + ''
+  const date = time.getDate() + ''
+  if (format && format.length === 1) {
+    return year + format + month + format + date
+  }
+  return year + (month < 10 ? '0' + month : month) + (date < 10 ? '0' + date : date)
+}
