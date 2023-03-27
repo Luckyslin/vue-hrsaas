@@ -6,8 +6,8 @@
           <span>总记录数: {{ total }} 条</span>
         </template>
         <template #right>
-          <el-button type="warning" size="small" @click="$router.push('/employees/import')">excel导入</el-button>
-          <el-button type="danger" size="small" @click="handleDownload">excel导出</el-button>
+          <el-button v-allow="'import_excel'" type="warning" size="small" @click="$router.push('/employees/import')">excel导入</el-button>
+          <el-button v-allow="'export_excel'" type="danger" size="small" @click="handleDownload">excel导出</el-button>
           <el-button type="primary" size="small" @click="addEmployees">新增员工</el-button>
         </template>
       </pageTool>
@@ -16,9 +16,15 @@
         <el-table border :data="employees">
           <el-table-column label="序号" type="index" />
           <el-table-column label="姓名" prop="username" />
+          <el-table-column label="头像" width="120" align="center">
+            <template v-slot="{row}">
+              <ImageHoder :src="row.staffPhoto" />
+            </template>
+          </el-table-column>
           <el-table-column
             label="工号"
             prop="workNumber"
+            sortable
           />
           <el-table-column
             label="聘用形式"
@@ -34,6 +40,8 @@
           />
           <el-table-column
             label="入职时间"
+            sortable
+            prop="timeOfEntry"
           >
             <template v-slot="{row}">
               {{ row.correctionTime }}
@@ -42,8 +50,8 @@
 
           <el-table-column label="操作" width="280">
             <template v-slot="{row}">
-              <el-button type="text" size="small">查看</el-button>
-              <el-button type="text" size="small">分配角色</el-button>
+              <el-button type="text" size="small" @click="$router.push('/employees/detail/'+row.id)">查看</el-button>
+              <el-button type="text" size="small" @click="hAssignRole(row.id)">分配角色</el-button>
               <el-button type="text" size="small" @click="hdel(row.id)">删除</el-button>
             </template>
           </el-table-column>
@@ -62,8 +70,11 @@
         </el-row>
       </el-card>
     </div>
-    <el-dialog :visible.sync="showDialog" destroy-on-close>
+    <el-dialog :visible.sync="showDialog" destroy-on-close title="新增员工">
       <emDialogs ref="emDialog" :obj="obj" @close="hClose" @submit="hSubmit" />
+    </el-dialog>
+    <el-dialog :visible.sync="showDialogRole" title="分配角色" @closed="closeDialog">
+      <assignRole ref="assignRole" :user-id="userId" @close="showDialogRole=false" />
     </el-dialog>
   </div>
 </template>
@@ -71,6 +82,7 @@
 import { delEmployees, getEployees } from '@/api/employees'
 import empployees from '@/constant/employees'
 import emDialogs from './emDialog'
+import assignRole from './assignRole'
 
 // 枚举将数组对象转换为对象
 
@@ -80,11 +92,14 @@ import emDialogs from './emDialog'
 // }, {})
 // console.log(obj)
 export default {
+
   components: {
-    emDialogs
+    emDialogs,
+    assignRole
   },
   data() {
     return {
+      showDialogRole: false,
       showDialog: false,
       pageParams: {
         page: 1,
@@ -92,7 +107,8 @@ export default {
       },
       total: 0,
       employees: [],
-      obj: {}
+      obj: {},
+      userId: ''
     }
   },
   async  created() {
@@ -110,6 +126,7 @@ export default {
       this.$router.push('/employees')
     }
   },
+
   methods: {
     // 获取数据渲染
     async loadEmployees() {
@@ -197,13 +214,28 @@ export default {
       if (!res[0]) return
       let header = Object.keys(res[0])
       header = header.map(item => mapList[item])
-      console.log(header)
+      // console.log(header)
       const data = res.map(item => {
+        // 将聘用形式修改成正式和非正式
+        const k = item.formOfEmployment
+        item.formOfEmployment = this.obj[k]
+        console.log(k)
         return Object.values(item)
       })
-      console.log(data)
       return { data, header }
+    },
+    // 分配权限
+    async hAssignRole(id) {
+      // console.log(id)
+      this.userId = id
+      this.showDialogRole = true
+      await this.$nextTick()
+      this.$refs.assignRole.loadGetAvatar()
+    },
+    closeDialog() {
+      this.$refs.assignRole.roleIds = []
     }
+
   }
 
 }

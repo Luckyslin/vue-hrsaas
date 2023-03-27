@@ -26,4 +26,10 @@ export function addimport(data) {
     data
   })
 }
-
+export function addAssignRoles(data) {
+  return request({
+    url: '/sys/user/assignRoles',
+    method: 'put',
+    data
+  })
+}

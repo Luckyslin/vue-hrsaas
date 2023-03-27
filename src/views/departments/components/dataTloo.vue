@@ -1,8 +1,8 @@
 <template>
   <el-row type="flex" justify="space-between" align="middle" style="height: 40px;width:100%">
     <el-col :span="19">
-      <svg-icon icon-class="01" />
-
+      <!-- <svg-icon icon-class="01" /> -->
+      <i class="el-icon-s-custom" />
       <span>{{ nodeTree.name }}</span>
     </el-col>
     <el-col :span="5">

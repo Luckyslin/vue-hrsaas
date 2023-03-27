@@ -27,7 +27,7 @@
               />
               <el-table-column label="操作">
                 <template v-slot="{row}">
-                  <el-button size="small" type="success">分配权限</el-button>
+                  <el-button size="small" type="success" @click="hAssign(row)">分配权限</el-button>
                   <el-button size="small" type="primary" @click="hedit(row)">编辑</el-button>
                   <el-button size="small" type="danger" @click="hDel(row)">删除</el-button>
                 </template>
@@ -78,6 +78,7 @@
 
         </el-tabs>
       </el-card>
+      <!-- 新增 -->
       <el-dialog :title="title" :visible.sync="showDialog" @closed="btnCancel">
         <el-form ref="roleForm" :model="roleForm" :rules="rules" label-width="120px">
           <el-form-item label="角色名称" prop="name">
@@ -95,15 +96,24 @@
 
         </el-row>
       </el-dialog>
+      <!-- 分配权限 -->
+      <el-dialog :visible.sync="showDialogAssign" title="分配权限">
+        <assign-permission ref="assignPermission" :role-id="roleId" @close="showDialogAssign=false" />
+      </el-dialog>
     </div>
   </div>
 </template>
 <script>
 import { addRole, delRole, editRole, getRole } from '@/api/role'
+import assignPermission from './assignPermission'
 export default {
+  components: {
+    assignPermission
+  },
   data() {
     return {
       title: '',
+      roleId: '',
       q: {
         page: 1,
         pagesize: 2
@@ -111,6 +121,7 @@ export default {
       roles: [],
       total: 0,
       showDialog: false,
+      showDialogAssign: false,
       // 专门接收新增或者编辑的编辑的表单数据
       roleForm: {
         name: '',
@@ -227,6 +238,12 @@ export default {
       this.showDialog = false
       this.$refs.roleForm.resetFields()
       this.loadRole()
+    },
+    async hAssign(row) {
+      this.showDialogAssign = true
+      this.roleId = row.id
+      await this.$nextTick()
+      this.$refs.assignPermission.loadGetAssign()
     }
   }
 }

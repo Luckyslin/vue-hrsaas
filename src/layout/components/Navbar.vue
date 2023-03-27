@@ -5,10 +5,13 @@
     <!-- 面包屑 -->
     <!-- <breadcrumb class="breadcrumb-container" /> -->
     <div class="app-breadcrumb">
-      江苏传智播客教育科技股份有限公司
+      {{ $t('navbar.comport') }}
       <span class="breadBtn">体验版</span>
     </div>
     <div class="right-menu">
+      <ScreenFull />
+      <Lang />
+
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img :src="userInfo.staffPhoto" class="user-avatar">
@@ -39,6 +42,7 @@
 import { mapGetters, mapState } from 'vuex'
 // import Breadcrumb from '@/components/Breadcrumb'引入面包屑
 import Hamburger from '@/components/Hamburger'
+import { resetRouter } from '@/router'
 
 export default {
   components: {
@@ -74,6 +78,8 @@ export default {
           type: 'success',
           message: '退出成功!'
         })
+        // 退出登录时重置路由
+        resetRouter()
       }).catch(() => {
 
       })

@@ -14,7 +14,7 @@ export function delRole(id) {
   })
 }
 export function addRole(data) {
-  console.log(data)
+  // console.log(data)
   return request({
     url: '/sys/role',
     method: 'post',
@@ -22,9 +22,23 @@ export function addRole(data) {
   })
 }
 export function editRole(data) {
-  console.log(data)
+  // console.log(data)
   return request({
     url: `/sys/role/${data.id}`,
+    method: 'put',
+    data
+  })
+}
+export function getAssign(id) {
+  return request({
+    url: `/sys/role/${id}`,
+    method: 'get'
+
+  })
+}
+export function addAssignPerm(data) {
+  return request({
+    url: '/sys/role/assignPrem',
     method: 'put',
     data
   })

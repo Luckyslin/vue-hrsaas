@@ -27,6 +27,9 @@ service.interceptors.request.use(function(config) {
 service.interceptors.response.use(function(response) {
   // 对响应数据做点什么
   const result = response.data.message
+  console.log(response)
+  console.log(response.data)
+  console.log(response.data.success)
   if (response.data.success) {
     if (message.includes(result)) {
       Vue.prototype.$message.success(result)

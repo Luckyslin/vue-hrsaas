@@ -56,6 +56,7 @@ export default {
     this.onlyOneChild = null
     return {}
   },
+
   methods: {
     hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter(item => {
@@ -64,6 +65,9 @@ export default {
         } else {
           // Temp set(will be used if only has one showing child)
           this.onlyOneChild = item
+          // const a = this.onlyOneChild.name
+          // console.log(a)
+          // console.log(this.$t('sidebar'))
           return true
         }
       })

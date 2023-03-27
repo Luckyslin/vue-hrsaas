@@ -14,33 +14,44 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
-
-/**
- * If you don't want to use mock-server
- * you want to use MockJs for mock api
- * you can execute: mockXHR()
- *
- * Currently MockJs will be used in the production environment,
- * please remove it before going online ! ! !
- */
-// if (process.env.NODE_ENV === 'production') {
-//   const { mockXHR } = require('../mock')
-//   mockXHR()
-// }
-
+// Vue.directive('allow', {
+//   inserted: function(el, binding) {
+//     const points = store.state.user.userInfo.roles.points
+//     console.log(points)
+//     if (!points.includes(binding.value)) {
+//       el.remove()
+//     }
+//   }
+// })
+// 使用自定义指令实现按钮权限控制
+Vue.directive('allow', {
+  inserted: function(el, binding) {
+    const poitns = store.state.user.userInfo.roles.points
+    // console.log(poitns)
+    if (!poitns.includes(binding.value)) {
+      el.remove()
+    }
+  }
+})
+// Vue.directive('show', {
+//   inserted: function(el, binding) {
+//     console.log(el)
+//     // console.log(poitns)
+//   }
+// })
 import page from '@/components/index'
-
+import i18n from '@/lang'
 Vue.use(page)
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 Vue.use(ElementUI)
-
 Vue.config.productionTip = false
 
 new Vue({
   el: '#app',
   router,
   store,
+  i18n,
   render: h => h(App)
 })

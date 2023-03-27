@@ -38,9 +38,9 @@ export default {
       const res = this.updatExcel(results)
       const str = res.map(item => Object.keys(item))
       if (!str[0].includes('username')) return this.$message.error('文件格式错误')
-      console.log(res.includes('username'))
+      // console.log(res.includes('username'))
       await addimport(res).catch(e => e)
-      console.log(results)
+      // console.log(results)
       this.$router.push({
         path: '/employees',
         query: { name: 'lisi' }
@@ -59,10 +59,13 @@ export default {
       }
       // 将excel中文属性名转化成英文
       return results.map(item => {
+        if (!Object.keys(item).includes('聘用形式')) {
+          item['聘用形式'] = 2
+        }
         const obj = {}
         Object.keys(item).forEach(cn => {
           const cnkey = mapInfo[cn]
-          // console.log(Object.keys(item).includes('姓名'))
+
           if (cnkey === 'correctionTime' || cnkey === 'timeOfEntry') {
             obj[cnkey] = formatExcelDate(item[cn])
           } else {
